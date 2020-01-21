@@ -27,7 +27,6 @@ export interface CalendarModel {
 
 interface RequestCalendarsAction {
     type: 'REQUEST_CALENDAR';
-    lastUpdated: string;
 }
 
 interface ReceiveCalendarsAction {
@@ -46,19 +45,19 @@ type KnownAction = RequestCalendarsAction | ReceiveCalendarsAction;
 
 export const actionCreators = {
 
-    requestCalendar: (lastUpdated: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    requestCalendar: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
 
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
 
-        if (appState && appState.calendar && lastUpdated !== appState.calendar.lastUpdated) {
+        if (appState && appState.calendar) {
             fetch(`calendar`)
                 .then(response => response.json() as Promise<CalendarResponse>)
                 .then(data => {
                     dispatch({ type: 'RECEIVE_CALENDAR', lastUpdated: data.lastUpdated, calendars: data.calendars });
                 });
 
-            dispatch({ type: 'REQUEST_CALENDAR', lastUpdated: lastUpdated });
+            dispatch({ type: 'REQUEST_CALENDAR'});
         }
     }
 };
@@ -77,16 +76,13 @@ export const reducer: Reducer<CalendarState> = (state: CalendarState | undefined
     switch (action.type) {
         case 'REQUEST_CALENDAR':
             return {
-                lastUpdated: action.lastUpdated,
+                lastUpdated: state.lastUpdated,
                 calendars: state.calendars,
                 isLoading: true
             };
         case 'RECEIVE_CALENDAR':
             // Only accept the incoming data if it matches the most recent request. This ensures we correctly
             // handle out-of-order responses.
-            console.log(action);
-            console.log(state);
-
             if (action.lastUpdated !== state.lastUpdated) {
                 return {
                     lastUpdated: action.lastUpdated,

@@ -28,8 +28,7 @@ class Calendar extends React.PureComponent<CalendarProps> {
     }
 
     private ensureDataFetched() {
-        const lastUpdated = this.props.match ? this.props.match.params.lastUpdated : "";
-        this.props.requestCalendar(lastUpdated);
+        this.props.requestCalendar();
     }
 
     private renderCalendarTable() {
