@@ -1,12 +1,13 @@
 import { Action, Reducer } from 'redux';
 import { AppThunkAction } from '.';
+import { toast } from "react-toastify";
 
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
 
 export interface HueState {
     isLoading: boolean;
-    lastUpdated?: string;
+    lastUpdated: string;
     hues: HueSceneModel[];
 }
 
@@ -36,7 +37,6 @@ export interface HueLightModel {
 
 interface RequestHueAction {
     type: 'REQUEST_HUE';
-    lastUpdated: string;
 }
 
 interface ReceiveHueAction {
@@ -54,17 +54,17 @@ type KnownAction = RequestHueAction | ReceiveHueAction;
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
-    requestHue: (lastUpdated: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    requestHue: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
         // Only load data if it's something we don't already have (and are not already loading)
         const appState = getState();
-        if (appState && appState.hue && lastUpdated !== appState.hue.lastUpdated) {
+        if (appState && appState.hue) {
             fetch(`hue`)
                 .then(response => response.json() as Promise<HueResponse>)
                 .then(data => {
                     dispatch({ type: 'RECEIVE_HUE', lastUpdated: data.lastUpdated, hues: data.hues });
                 });
 
-            dispatch({ type: 'REQUEST_HUE', lastUpdated: lastUpdated });
+            dispatch({ type: 'REQUEST_HUE' });
         }
     }
 };
@@ -72,7 +72,7 @@ export const actionCreators = {
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
-const unloadedState: HueState = { hues: [], isLoading: false };
+const unloadedState: HueState = { lastUpdated: "NEVER", hues: [], isLoading: false };
 
 export const reducer: Reducer<HueState> = (state: HueState | undefined, incomingAction: Action): HueState => {
     if (state === undefined) {
@@ -83,26 +83,30 @@ export const reducer: Reducer<HueState> = (state: HueState | undefined, incoming
     switch (action.type) {
         case 'REQUEST_HUE':
             return {
-                lastUpdated: action.lastUpdated,
+                lastUpdated: state.lastUpdated,
                 hues: state.hues,
                 isLoading: true
             };
         case 'RECEIVE_HUE':
             // Only accept the incoming data if it matches the most recent request. This ensures we correctly
             // handle out-of-order responses.
-            console.log(action.lastUpdated);
-            console.log(state.lastUpdated);
-            console.log("--------");
+            console.log(action);
+            console.log(state);
             if (action.lastUpdated !== state.lastUpdated) {
-                console.log("Updating huestore")
+                toast("New state for HUE");
+                state = {
+                    lastUpdated: action.lastUpdated,
+                    hues: action.hues,
+                    isLoading: false
+                };
                 return {
                     lastUpdated: action.lastUpdated,
                     hues: action.hues,
                     isLoading: false
                 };
             }
-            break;
+            return state;
+        default:
+            return state;
     }
-    console.log(state);
-    return state;
 };

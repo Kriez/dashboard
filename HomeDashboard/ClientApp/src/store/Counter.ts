@@ -38,7 +38,7 @@ export const reducer: Reducer<CounterState> = (state: CounterState | undefined, 
 
     const action = incomingAction as KnownAction;
     switch (action.type) {
-        case 'INCREMENT_COUNT':
+        case 'INCREMENT_COUNT':            
             return { count: state.count + 1 };
         case 'DECREMENT_COUNT':
             return { count: state.count - 1 };

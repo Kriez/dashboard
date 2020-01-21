@@ -20,11 +20,16 @@ namespace HomeDashboard.WorkerService.Calendar.Work
         private readonly DatabaseContext _context;
         private readonly string[] Scopes = { CalendarService.Scope.CalendarReadonly };
         private readonly string ApplicationName = "HomeDashboard";
+        private List<CalendarItem> _calendarItems;
 
         public Worker(DatabaseContext context)
         {
             _context = context;
+            _calendarItems = new List<CalendarItem>();
+        }
 
+        public void ScanAsync()
+        {
             UserCredential credential;
 
             using (var stream =
@@ -50,22 +55,21 @@ namespace HomeDashboard.WorkerService.Calendar.Work
             // Define parameters of request.
             EventsResource.ListRequest request = service.Events.List("primary");
             request.TimeMin = DateTime.Now;
-            var timeMax = DateTime.Now.AddDays(1);
-            request.TimeMax = new DateTime(timeMax.Year, timeMax.Month, timeMax.Day, 23, 59, 59);
+            request.MaxResults = 10;
+         //   var timeMax = DateTime.Now.AddDays(1);
+        //    request.TimeMax = new DateTime(timeMax.Year, timeMax.Month, timeMax.Day, 23, 59, 59);
             request.ShowDeleted = false;
-            request.SingleEvents = true;            
+            request.SingleEvents = true;
             request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
 
             // List events.
             Events events = request.Execute();
-            if (events.Items != null && events.Items.Count > 0)
+            if (events.Items != null)
             {
                 foreach (var eventItem in events.Items)
                 {
-                    var calendarItem = _context.CalendarItems.Find(eventItem.Id);
-                    if (calendarItem == null)
-                    {
-                        calendarItem = new CalendarItem()
+
+                    CalendarItem calendarItem = new CalendarItem()
                         {
                             Id = eventItem.Id,
                             Title = eventItem.Summary,
@@ -73,25 +77,39 @@ namespace HomeDashboard.WorkerService.Calendar.Work
                             End = eventItem.End.DateTime,
                             Updated = eventItem.Updated
                         };
-                        _context.CalendarItems.Add(calendarItem);
-                    }
-                    else
-                    {
-                        if (calendarItem.Updated != eventItem.Updated)
-                        {
-                            calendarItem.Title = eventItem.Summary;
-                            calendarItem.Start = eventItem.Start.DateTime;
-                            calendarItem.End = eventItem.End.DateTime;
-
-                            _context.Entry(calendarItem).State = EntityState.Modified;
-                        }
-                    }
+                    _calendarItems.Add(calendarItem);                  
                 }
             }
-            else
+        }
+
+        public void SaveAsync()
+        {
+            foreach (var calendarItem in _calendarItems)
             {
-                _context.CalendarItems.RemoveRange(_context.CalendarItems.ToList());
+                var oldCalendarItem = _context.CalendarItems.Find(calendarItem.Id);
+                if (oldCalendarItem == null)
+                {
+                    _context.CalendarItems.Add(calendarItem);
+                }
+                else if(!calendarItem.Updated.Equals(oldCalendarItem.Updated))
+                {
+                    oldCalendarItem.Title = calendarItem.Title;
+                    oldCalendarItem.Start = calendarItem.Start;
+                    oldCalendarItem.End = calendarItem.End;
+                    oldCalendarItem.Updated = calendarItem.Updated;            
+                }
             }
+
+            foreach (var calendarItem in _context.CalendarItems.ToList())
+            {
+                if (_calendarItems.Any(o => o.Id.Equals(calendarItem.Id)))
+                {
+                    continue;
+                }
+
+                _context.CalendarItems.Remove(calendarItem);
+            }
+
         }
     }
 }

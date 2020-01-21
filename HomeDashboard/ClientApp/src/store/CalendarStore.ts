@@ -16,10 +16,9 @@ export interface CalendarResponse {
 }
 
 export interface CalendarModel {
-    date: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
+    title: string;
+    start: string;
+    end: string;
 }
 
 // -----------------
@@ -85,7 +84,10 @@ export const reducer: Reducer<CalendarState> = (state: CalendarState | undefined
         case 'RECEIVE_CALENDAR':
             // Only accept the incoming data if it matches the most recent request. This ensures we correctly
             // handle out-of-order responses.
-            if (action.lastUpdated === state.lastUpdated) {
+            console.log(action);
+            console.log(state);
+
+            if (action.lastUpdated !== state.lastUpdated) {
                 return {
                     lastUpdated: action.lastUpdated,
                     calendars: action.calendars,

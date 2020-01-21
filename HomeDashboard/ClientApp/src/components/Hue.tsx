@@ -8,6 +8,7 @@ import * as HueStore from '../store/HueStore';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
+
 type HueProps =
     HueStore.HueState // ... state we've requested from the Redux store
     & typeof HueStore.actionCreators // ... plus action creators we've requested
@@ -18,13 +19,11 @@ class Hue extends React.PureComponent<HueProps> {
 
     public componentDidMount() {
         this.timerID = setInterval(() => this.ensureDataFetched(), 5000);
-
         this.ensureDataFetched();
     }
 
     public render() {
-        console.log(this.props.hues);
-
+        console.log(this.props);
         return (
             <React.Fragment>
                 {this.renderHuesTable()}
@@ -34,8 +33,8 @@ class Hue extends React.PureComponent<HueProps> {
     }
 
     private ensureDataFetched() {
-        const lastUpdated = this.props.match ? this.props.match.params.lastUpdated : "";
-        this.props.requestHue(lastUpdated);
+        console.log("Derp");
+        this.props.requestHue();
     }
 
     private renderHuesTable() {

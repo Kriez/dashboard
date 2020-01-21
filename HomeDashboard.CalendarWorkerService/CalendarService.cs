@@ -45,12 +45,12 @@ namespace HomeDashboard.CalendarWorkerService
         {
             if (IsActivated)
             {
-                _logger.LogInformation($"HueService running. Update interval set to {TimerInterval.TotalSeconds} seconds.");
+                _logger.LogInformation($"CalendarService running. Update interval set to {TimerInterval.TotalSeconds} seconds.");
                 _timer = new Timer(DoWork, null, TimerInterval, TimerInterval);
             }
             else
             {
-                _logger.LogInformation($"HueService is disabled");
+                _logger.LogInformation($"CalendarService is disabled");
 
             }
         }
@@ -71,11 +71,13 @@ namespace HomeDashboard.CalendarWorkerService
                     var context = scope.ServiceProvider.GetService<DatabaseContext>();
                     context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
                     _timer.Change(Timeout.Infinite, Timeout.Infinite);
-                    _logger.LogInformation("HueService is doing some work.");
+                    _logger.LogInformation("CalendarService is doing some work.");
 
                     Worker worker = new Worker(context);
+                    worker.ScanAsync();
+                    worker.SaveAsync();
 
-                    _logger.LogInformation("HueService is done with some work.");
+                    _logger.LogInformation("CalendarService is done with some work.");
 
                     if (context.ChangeTracker.HasChanges())
                     {

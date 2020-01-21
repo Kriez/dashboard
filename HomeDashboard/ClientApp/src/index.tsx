@@ -11,6 +11,10 @@ import registerServiceWorker from './registerServiceWorker';
 
 import Hue from './components/Hue';
 import Calendar from './components/Calendar';
+import Counter from './components/Counter';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './css/app.css';
 
@@ -35,6 +39,7 @@ ReactDOM.render(
                     <div className="panel col-lg-4">
                         <Calendar />
                     </div>
+                    <ToastContainer autoClose={3000} />
                 </div>
             </React.Fragment>
         </ConnectedRouter>

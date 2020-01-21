@@ -38,7 +38,8 @@
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-react": "7.16.0",
     "typescript": "3.6.4",
-    "react-circular-progressbar": "2.0.3"
+    "react-circular-progressbar": "2.0.3",
+    "react-toastify": "5.5.0"
   },
   "scripts": {
     "start": "react-scripts start",

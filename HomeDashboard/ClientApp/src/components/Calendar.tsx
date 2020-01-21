@@ -11,20 +11,16 @@ type CalendarProps =
     & RouteComponentProps<{ lastUpdated: string }>; // ... plus incoming routing parameters
 
 class Calendar extends React.PureComponent<CalendarProps> {
-    public componentDidMount() {
-        this.ensureDataFetched();
-    }
+    private timerID: NodeJS.Timeout | undefined;
 
-    // This method is called when the route parameters change
-    public componentDidUpdate() {
-       // this.ensureDataFetched();
+    public componentDidMount() {
+        this.timerID = setInterval(() => this.ensureDataFetched(), 60000);
+        this.ensureDataFetched();
     }
 
     public render() {
         return (
             <React.Fragment>
-                <h1 id="tabelLabel">Weather forecast</h1>
-                <p>This component demonstrates fetching data from the server and working with URL parameters.</p>
                 {this.renderCalendarTable()}
                 {this.renderPagination()}
             </React.Fragment>
@@ -38,38 +34,33 @@ class Calendar extends React.PureComponent<CalendarProps> {
 
     private renderCalendarTable() {
         return (
-            <table className='table table-striped' aria-labelledby="tabelLabel">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Temp. (C)</th>
-                        <th>Temp. (F)</th>
-                        <th>Summary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.props.calendars.map((forecast: CalendarStore.CalendarModel) =>
-                        <tr key={forecast.date}>
-                            <td>{forecast.date}</td>
-                            <td>{forecast.temperatureC}</td>
-                            <td>{forecast.temperatureF}</td>
-                            <td>{forecast.summary}</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+            <div className="container">
+                <div className="calendar dark">
+                    <div className="calendar_header">
+                        <h1 className="header_title">Calendar</h1>
+                    </div>
+                    <div className="calendar_events">
+                        <p className="ce_title">Upcoming Events</p>
+
+
+                        {this.props.calendars.map((calendarItem: CalendarStore.CalendarModel) =>
+                            <div className="event_item">
+                                <div className="ei_Dot dot_active"></div>
+                                <div className="ei_Title">{calendarItem.start} <br></br>{calendarItem.end}</div>
+                                <div className="ei_Copy">{calendarItem.title}</div>
+                            </div>
+                        )}
+                        </div>
+                    </div>
+
+                </div>
         );
     }
 
     private renderPagination() {
-        const prevStartDateIndex = this.props.lastUpdated;
-        const nextStartDateIndex = this.props.lastUpdated;
-
         return (
             <div className="d-flex justify-content-between">
-                <Link className='btn btn-outline-secondary btn-sm' to={`/fetch-data/${prevStartDateIndex}`}>Previous</Link>
                 {this.props.isLoading && <span>Loading...</span>}
-                <Link className='btn btn-outline-secondary btn-sm' to={`/fetch-data/${nextStartDateIndex}`}>Next</Link>
             </div>
         );
     }
