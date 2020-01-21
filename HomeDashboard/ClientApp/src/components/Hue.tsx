@@ -1,0 +1,75 @@
+﻿import * as React from 'react';
+import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
+import { Link } from 'react-router-dom';
+import { ApplicationState } from '../store';
+import * as HueStore from '../store/HueStore';
+
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+
+type HueProps =
+    HueStore.HueState // ... state we've requested from the Redux store
+    & typeof HueStore.actionCreators // ... plus action creators we've requested
+    & RouteComponentProps<{ lastUpdated: string }>; // ... plus incoming routing parameters
+
+class Hue extends React.PureComponent<HueProps> {
+    private timerID: NodeJS.Timeout | undefined;
+
+    public componentDidMount() {
+        this.timerID = setInterval(() => this.ensureDataFetched(), 5000);
+
+        this.ensureDataFetched();
+    }
+
+    public render() {
+        console.log(this.props.hues);
+
+        return (
+            <React.Fragment>
+                {this.renderHuesTable()}
+                {this.renderPagination()}
+            </React.Fragment>
+        );
+    }
+
+    private ensureDataFetched() {
+        const lastUpdated = this.props.match ? this.props.match.params.lastUpdated : "";
+        this.props.requestHue(lastUpdated);
+    }
+
+    private renderHuesTable() {
+        return (<div>
+            {this.props.hues.map((hue: HueStore.HueSceneModel) =>
+                <div className="card" id={hue.id} >
+                    <div className="card-body">
+                        <h5 className="card-title">{hue.name}</h5>
+                        <div className="row">
+                        {hue.lights.map((light: HueStore.HueLightModel) =>
+                            <div col-lg-4>
+                                <div style={{ width: 100, height: 100 }}>
+                                    <CircularProgressbar styles={buildStyles({ backgroundColor: "black", trailColor: "transparent", pathColor: '#' + light.color })} value={light.brightness} minValue={0} maxValue={254} text={`${light.name}`} />
+                                    </div>
+                            </div>
+                            )}
+                            </div>
+                    </div>
+                </div>
+            )}
+        </div>
+        );
+    }
+
+    private renderPagination() {
+        return (
+            <div className="d-flex justify-content-between">
+                {this.props.isLoading && <span>Loading...</span>}
+            </div>
+        );
+    }
+}
+
+export default connect(
+    (state: ApplicationState) => state.hue, // Selects which state properties are merged into the component's props
+    HueStore.actionCreators // Selects which action creators are merged into the component's props
+)(Hue as any);

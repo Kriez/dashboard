@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.0" />
+    <PackageReference Include="Q42.HueApi" Version="3.14.1" />
+    <PackageReference Include="Q42.HueApi.ColorConverters" Version="3.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HomeDashboard.Database\HomeDashboard.Data.csproj" />
+    <ProjectReference Include="..\HomeDashboard.Library\HomeDashboard.Library.csproj" />
+  </ItemGroup>
+</Project>
