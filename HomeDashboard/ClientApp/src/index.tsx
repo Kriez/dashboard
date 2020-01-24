@@ -12,6 +12,7 @@ import registerServiceWorker from './registerServiceWorker';
 import Hue from './components/Hue';
 import Calendar from './components/Calendar';
 import Counter from './components/Counter';
+import Clock from './components/Clock';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -35,6 +36,7 @@ ReactDOM.render(
                         <Hue />
                     </div>
                     <div className="panel col-lg-4">
+                        <Clock />
                     </div>
                     <div className="panel col-lg-4">
                         <Calendar />
