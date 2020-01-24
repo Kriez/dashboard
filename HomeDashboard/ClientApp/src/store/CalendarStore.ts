@@ -19,6 +19,7 @@ export interface CalendarModel {
     title: string;
     start: string;
     end: string;
+    color: string;
 }
 
 // -----------------

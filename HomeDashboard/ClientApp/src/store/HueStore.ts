@@ -93,7 +93,7 @@ export const reducer: Reducer<HueState> = (state: HueState | undefined, incoming
             console.log(action);
             console.log(state);
             if (action.lastUpdated !== state.lastUpdated) {
-                toast("New state for HUE");
+                toast.info('HueComponent updated');
                 state = {
                     lastUpdated: action.lastUpdated,
                     hues: action.hues,

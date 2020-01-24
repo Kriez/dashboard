@@ -21,13 +21,11 @@ namespace HomeDashboard.CalendarWorkerService
         private readonly bool IsActivated = false;
         private readonly IServiceScopeFactory _scopeService;
 
-        private string _ipAdress;
-        private readonly string _appKey;
         private Timer _timer;
 
         public CalendarService(IConfiguration configuration, ILogger<CalendarService> logger, IServiceScopeFactory scopeService)
         {
-            var seconds = Int32.Parse(configuration.GetSection("HostedServices").GetSection("HueService").GetSection("UpdateIntervalSeconds").Value);
+            var seconds = 60 * 5;
 
             if (seconds > 0)
             {
@@ -35,7 +33,6 @@ namespace HomeDashboard.CalendarWorkerService
                 IsActivated = true;
             }
 
-            _appKey = configuration.GetSection("HostedServices").GetSection("HueService").GetSection("appkey").Value;
 
             _logger = logger;
             _scopeService = scopeService;

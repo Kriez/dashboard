@@ -29,7 +29,7 @@ namespace HomeDashboard.Controllers
         {
             CalendarResponse response = new CalendarResponse();
             response.LastUpdated = (await _context.UpdateTables.SingleAsync(u => u.Key.Equals(UpdateType.Calendar))).LastUpdated;
-            response.Calendars = await _context.CalendarItems.OrderBy(c => c.Start).Select(c => _mapper.Map<CalendarItemDto>(c)).ToListAsync();
+            response.Calendars = await _context.CalendarItems.Include(c => c.Calendar).OrderBy(c => c.Start).Select(c => _mapper.Map<CalendarItemDto>(c)).ToListAsync();
             return Ok(response);
         }
     }

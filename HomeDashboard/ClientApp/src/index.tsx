@@ -39,7 +39,16 @@ ReactDOM.render(
                     <div className="panel col-lg-4">
                         <Calendar />
                     </div>
-                    <ToastContainer autoClose={3000} />
+                    <ToastContainer
+                        position="top-center"
+                        autoClose={3000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick={false}
+                        rtl={false}
+                        draggable={false}
+                        pauseOnHover={false}
+                    />
                 </div>
             </React.Fragment>
         </ConnectedRouter>

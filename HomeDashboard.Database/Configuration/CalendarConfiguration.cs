@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace kriez.HomeDashboard.Data.Configuration
 {
-    public class CalendarItemConfiguration : IEntityTypeConfiguration<CalendarItem>
+    public class CalendarConfiguration : IEntityTypeConfiguration<Calendar>
     {
-        public void Configure(EntityTypeBuilder<CalendarItem> modelBuilder)
+        public void Configure(EntityTypeBuilder<Calendar> modelBuilder)
         {
             modelBuilder
                 .HasKey(l => l.Id);
@@ -15,10 +15,6 @@ namespace kriez.HomeDashboard.Data.Configuration
                 .Property(l => l.Id)
                 .ValueGeneratedNever();
 
-            modelBuilder
-                .HasOne<Calendar>(c => c.Calendar)
-                .WithMany()
-                .HasForeignKey(o => o.CalendarId);
         }
     }
 }

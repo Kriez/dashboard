@@ -18,11 +18,14 @@ namespace kriez.HomeDashboard.Data
             modelBuilder.ApplyConfiguration(new HueScenesConfiguration());
             modelBuilder.ApplyConfiguration(new HueLightConfiguration());
             modelBuilder.ApplyConfiguration(new UpdateTableConfiguration());
+            modelBuilder.ApplyConfiguration(new CalendarItemConfiguration());
+            modelBuilder.ApplyConfiguration(new CalendarConfiguration());
         }
 
         public virtual DbSet<HueLight> HueLights { get; set; }
         public virtual DbSet<HueScene> HueScenes { get; set; }
         public virtual DbSet<CalendarItem> CalendarItems { get; set; }
         public virtual DbSet<UpdateTable> UpdateTables { get; set; }
+        public virtual DbSet<Calendar> Calendars { get; set; }
     }
 }

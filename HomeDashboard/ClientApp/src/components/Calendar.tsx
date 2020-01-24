@@ -32,6 +32,9 @@ class Calendar extends React.PureComponent<CalendarProps> {
     }
 
     private renderCalendarTable() {
+        const startCalendarOptions = { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+        const endCalendarOptions = { hour: 'numeric', minute: 'numeric' };
+
         return (
             <div className="container">
                 <div className="calendar dark">
@@ -44,8 +47,8 @@ class Calendar extends React.PureComponent<CalendarProps> {
 
                         {this.props.calendars.map((calendarItem: CalendarStore.CalendarModel) =>
                             <div className="event_item">
-                                <div className="ei_Dot dot_active"></div>
-                                <div className="ei_Title">{calendarItem.start} <br></br>{calendarItem.end}</div>
+                                <div className="ei_Dot" style={{ backgroundColor: "#" + calendarItem.color }}></div>
+                                <div className="ei_Title">{new Intl.DateTimeFormat('sv', startCalendarOptions).format(new Date(calendarItem.start))} - {new Intl.DateTimeFormat('sv', endCalendarOptions).format(new Date(calendarItem.end))}</div>
                                 <div className="ei_Copy">{calendarItem.title}</div>
                             </div>
                         )}

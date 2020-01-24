@@ -33,23 +33,28 @@ class Hue extends React.PureComponent<HueProps> {
     }
 
     private ensureDataFetched() {
+        console.log("Derp");
         this.props.requestHue();
     }
 
     private renderHuesTable() {
         return (<div>
             {this.props.hues.map((hue: HueStore.HueSceneModel) =>
-                <div className="card" id={hue.id} style={{ color: 'white' }} >
+                <div className="card" id={hue.id} >
                     <div className="card-body">
                         <h5 className="card-title">{hue.name}</h5>
+                        <div className="row">
                         {hue.lights.map((light: HueStore.HueLightModel) =>
-                            <div>
-                                <p style={{ marginBottom: '0px', marginTop: '10px' }} className="text-left">{light.name}</p>
-                                <div className="progress" style={{ height: '10px', backgroundColor: '#202020' }}>
-                                    <div className={"progress-bar"} style={{ width: (light.brightness * 100 / 254) + '%', backgroundColor: "#" + light.color }} role="progressbar" aria-valuenow={light.brightness} aria-valuemin={0} aria-valuemax={254}></div>
-                                </div>
+                            <div col-lg-4>
+                                <div style={{ width: 80, height: 80 }}>
+                                    <CircularProgressbarWithChildren styles={buildStyles({ backgroundColor: "black", trailColor: "transparent", pathColor: '#' + light.color })} value={200} minValue={0} maxValue={254} >
+                                        <img style={{ width: 50, marginTop: -5 }} src="https://localhost:44372/dinner.png" alt="doge" />
+                                    </CircularProgressbarWithChildren>
+                                   
+                                    </div>
                             </div>
-                        )}
+                            )}
+                            </div>
                     </div>
                 </div>
             )}

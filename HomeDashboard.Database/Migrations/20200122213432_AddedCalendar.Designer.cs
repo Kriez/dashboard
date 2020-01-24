@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using kriez.HomeDashboard.Data;
 
 namespace kriez.HomeDashboard.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200122213432_AddedCalendar")]
+    partial class AddedCalendar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,9 +39,6 @@ namespace kriez.HomeDashboard.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CalendarId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime?>("End")
                         .HasColumnType("datetime2");
 
@@ -53,8 +52,6 @@ namespace kriez.HomeDashboard.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CalendarId");
 
                     b.ToTable("CalendarItems");
                 });
@@ -113,13 +110,6 @@ namespace kriez.HomeDashboard.Data.Migrations
                     b.HasKey("Key");
 
                     b.ToTable("UpdateTables");
-                });
-
-            modelBuilder.Entity("kriez.HomeDashboard.Data.Models.CalendarItem", b =>
-                {
-                    b.HasOne("kriez.HomeDashboard.Data.Models.Calendar", null)
-                        .WithMany()
-                        .HasForeignKey("CalendarId");
                 });
 
             modelBuilder.Entity("kriez.HomeDashboard.Data.Models.HueLight", b =>

@@ -22,14 +22,13 @@ namespace HomeDashboard.WorkerService.Calendar.Work
         private readonly string ApplicationName = "HomeDashboard";
         private List<CalendarItem> _calendarItems;
 
+        private CalendarService _calendarService;
+
         public Worker(DatabaseContext context)
         {
             _context = context;
             _calendarItems = new List<CalendarItem>();
-        }
 
-        public void ScanAsync()
-        {
             UserCredential credential;
 
             using (var stream =
@@ -46,18 +45,31 @@ namespace HomeDashboard.WorkerService.Calendar.Work
                     new FileDataStore(credPath, true)).Result;
             }
 
-            var service = new CalendarService(new BaseClientService.Initializer()
+            _calendarService = new CalendarService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
                 ApplicationName = ApplicationName,
             });
 
+        }
+
+        public void ScanAsync()
+        {
+            var calendars =_context.Calendars.ToList();
+            foreach (var calendar in calendars)
+            {
+                ScanCalendar(calendar.Id);
+            }
+           
+        }
+
+        private void ScanCalendar(string calendarId)
+        {
             // Define parameters of request.
-            EventsResource.ListRequest request = service.Events.List("primary");
+            EventsResource.ListRequest request = _calendarService.Events.List(calendarId);
             request.TimeMin = DateTime.Now;
-            request.MaxResults = 10;
-         //   var timeMax = DateTime.Now.AddDays(1);
-        //    request.TimeMax = new DateTime(timeMax.Year, timeMax.Month, timeMax.Day, 23, 59, 59);
+            var timeMax = DateTime.Now.AddDays(7);
+            request.TimeMax = new DateTime(timeMax.Year, timeMax.Month, timeMax.Day, 23, 59, 59);
             request.ShowDeleted = false;
             request.SingleEvents = true;
             request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
@@ -70,14 +82,15 @@ namespace HomeDashboard.WorkerService.Calendar.Work
                 {
 
                     CalendarItem calendarItem = new CalendarItem()
-                        {
-                            Id = eventItem.Id,
-                            Title = eventItem.Summary,
-                            Start = eventItem.Start.DateTime,
-                            End = eventItem.End.DateTime,
-                            Updated = eventItem.Updated
-                        };
-                    _calendarItems.Add(calendarItem);                  
+                    {
+                        Id = eventItem.Id,
+                        Title = eventItem.Summary,
+                        Start = eventItem.Start.DateTime,
+                        End = eventItem.End.DateTime,
+                        Updated = eventItem.Updated,
+                        CalendarId = calendarId
+                    };
+                    _calendarItems.Add(calendarItem);
                 }
             }
         }

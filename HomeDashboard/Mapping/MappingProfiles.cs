@@ -15,8 +15,10 @@ namespace HomeDashboard.Mapping
             CreateMap<HueScene, HueSceneDto>();
             CreateMap<HueSceneDto, HueScene>();
 
-            CreateMap<CalendarItem, CalendarItemDto>();
-                
+            CreateMap<CalendarItem, CalendarItemDto>()
+                .AfterMap((src, dest) => dest.Color = src.Calendar.Color);
+
+
         }
     }
 }
