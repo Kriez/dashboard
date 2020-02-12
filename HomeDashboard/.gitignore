@@ -230,3 +230,8 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# Database
+homedashboard.db
+
+**/Google.Apis.Auth.OAuth2.Responses.TokenResponse-user
