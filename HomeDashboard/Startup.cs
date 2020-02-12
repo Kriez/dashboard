@@ -48,7 +48,7 @@ namespace HomeDashboard
             // Add Database
             services.AddDbContext<DatabaseContext>(
                 options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient
+                    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient
                 );
 
             // Add HostedServices

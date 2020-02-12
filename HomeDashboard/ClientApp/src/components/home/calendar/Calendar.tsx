@@ -2,8 +2,11 @@
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
-import { ApplicationState } from '../store';
-import * as CalendarStore from '../store/CalendarStore';
+import { ApplicationState } from '../../../store';
+import * as CalendarStore from '../../../store/CalendarStore';
+
+import './calendar.css';
+
 
 type CalendarProps =
     CalendarStore.CalendarState // ... state we've requested from the Redux store
@@ -14,7 +17,7 @@ class Calendar extends React.PureComponent<CalendarProps> {
     private timerID: NodeJS.Timeout | undefined;
 
     public componentDidMount() {
-        this.timerID = setInterval(() => this.ensureDataFetched(), 60000);
+        this.timerID = global.setInterval(() => this.ensureDataFetched(), 60000);
         this.ensureDataFetched();
     }
 

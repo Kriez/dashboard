@@ -13,7 +13,7 @@ class Clock extends Component<{}, ClockState>   {
 			time: new Date()
 		});
 
-		this.timerId = setInterval(() => this.updateClock(), 1000);
+		this.timerId = global.setInterval(() => this.updateClock(), 1000);
 
 	}
 

@@ -30,6 +30,7 @@
     "@types/react-router": "5.1.2",
     "@types/react-router-dom": "5.1.0",
     "@types/reactstrap": "8.0.6",
+    "@types/styled-components": "4.4.2",
     "@typescript-eslint/parser": "^2.5.0",
     "cross-env": "6.0.3",
     "eslint": "^6.5.1",
@@ -39,7 +40,8 @@
     "eslint-plugin-react": "7.16.0",
     "typescript": "3.6.4",
     "react-circular-progressbar": "2.0.3",
-    "react-toastify": "5.5.0"
+    "react-toastify": "5.5.0",
+    "styled-components": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

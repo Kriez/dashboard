@@ -52,7 +52,7 @@ namespace HueWorkerService
             if (IsActivated)
             {
                 _logger.LogInformation($"HueService running. Update interval set to {TimerInterval.TotalSeconds} seconds.");
-                _timer = new Timer(DoWork, null, TimerInterval, TimerInterval);
+                _timer = new Timer(DoWork, null, new TimeSpan(0, 0, 5), TimerInterval);
             }
             else
             {

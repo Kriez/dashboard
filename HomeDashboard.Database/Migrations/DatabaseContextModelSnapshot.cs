@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using kriez.HomeDashboard.Data;
 
@@ -15,17 +14,15 @@ namespace kriez.HomeDashboard.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "3.1.1");
 
             modelBuilder.Entity("kriez.HomeDashboard.Data.Models.Calendar", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Color")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -35,22 +32,22 @@ namespace kriez.HomeDashboard.Data.Migrations
             modelBuilder.Entity("kriez.HomeDashboard.Data.Models.CalendarItem", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CalendarId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("End")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("Start")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -62,25 +59,25 @@ namespace kriez.HomeDashboard.Data.Migrations
             modelBuilder.Entity("kriez.HomeDashboard.Data.Models.HueLight", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Brightness")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Color")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Group")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsOn")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool?>("IsReachable")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -92,10 +89,10 @@ namespace kriez.HomeDashboard.Data.Migrations
             modelBuilder.Entity("kriez.HomeDashboard.Data.Models.HueScene", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -105,10 +102,10 @@ namespace kriez.HomeDashboard.Data.Migrations
             modelBuilder.Entity("kriez.HomeDashboard.Data.Models.UpdateTable", b =>
                 {
                     b.Property<int>("Key")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Key");
 
@@ -117,7 +114,7 @@ namespace kriez.HomeDashboard.Data.Migrations
 
             modelBuilder.Entity("kriez.HomeDashboard.Data.Models.CalendarItem", b =>
                 {
-                    b.HasOne("kriez.HomeDashboard.Data.Models.Calendar", null)
+                    b.HasOne("kriez.HomeDashboard.Data.Models.Calendar", "Calendar")
                         .WithMany()
                         .HasForeignKey("CalendarId");
                 });

@@ -2,12 +2,13 @@
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
-import { ApplicationState } from '../store';
-import * as HueStore from '../store/HueStore';
+import { ApplicationState } from '../../../store';
+import * as HueStore from '../../../store/HueStore';
 
 import { CircularProgressbar, CircularProgressbarWithChildren,  buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
+import './Hue.css';
 
 type HueProps =
     HueStore.HueState // ... state we've requested from the Redux store
@@ -18,7 +19,7 @@ class Hue extends React.PureComponent<HueProps> {
     private timerID: NodeJS.Timeout | undefined;
 
     public componentDidMount() {
-        this.timerID = setInterval(() => this.ensureDataFetched(), 5000);
+        this.timerID = global.setInterval(() => this.ensureDataFetched(), 5000);
         this.ensureDataFetched();
     }
 
@@ -37,7 +38,7 @@ class Hue extends React.PureComponent<HueProps> {
     }
 
     private renderHuesTable() {
-        return (<div>
+        return (<div className="hueComponent">
             {this.props.hues.map((hue: HueStore.HueSceneModel) =>
                 <div className="card" id={hue.id} style={{ color: 'white' }} >
                     <div className="card-body">
